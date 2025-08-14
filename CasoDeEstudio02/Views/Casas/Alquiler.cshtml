@@ -1,4 +1,49 @@
-﻿@{
+﻿@model CasoDeEstudio02.Models.AlquilarCasaViewModel
+@{
+    ViewBag.Title = "Alquilar casa";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>Alquilar casa</h2>
+
+@using (Html.BeginForm("Alquilar", "Casas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.IdCasa, "Casa")
+        @Html.DropDownListFor(m => m.IdCasa, Model.CasasDisponibles, "-- Seleccione --", new { @class = "form-control", id = "ddlCasas" })
+        @Html.ValidationMessageFor(m => m.IdCasa)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PrecioCasa)
+        @Html.TextBoxFor(m => m.PrecioCasa, new { @class = "form-control", @readonly = "readonly", id = "txtPrecio" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.UsuarioAlquiler)
+        @Html.TextBoxFor(m => m.UsuarioAlquiler, new { @class = "form-control", placeholder = "Ingrese el usuario" })
+        @Html.ValidationMessageFor(m => m.UsuarioAlquiler)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Alquilar</button>
+}
+
+@section Scripts {
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $("#ddlCasas").on("change", function () {
+                var id = $(this).val();
+                if (id) {
+                    $.getJSON("@Url.Action("PrecioDeCasa", "Casas")", { id: id })
+                        .done(function (precio) { $("#txtPrecio").val(precio); })
+                        .fail(function () { $("#txtPrecio").val(""); });
+                } else {
+                    $("#txtPrecio").val("");
+                }
+            });
+        });
+    </script>
+}
