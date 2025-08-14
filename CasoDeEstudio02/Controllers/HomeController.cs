@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CasoDeEstudio02.EF;
+using CasoDeEstudio02.Models;
 using System.Linq;
-using System.Web;
+using System.Text;
 using System.Web.Mvc;
 
-namespace CasoDeEstudio02.Controllers
+
+namespace TrabajoEnClase.Controllers
 {
     public class HomeController : Controller
     {
+
+        #region Index
+
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+        #endregion
 
-            return View();
-        }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }
