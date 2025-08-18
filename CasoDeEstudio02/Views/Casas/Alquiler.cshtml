@@ -1,4 +1,65 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@model CasoDeEstudio02.Models.AlquilarCasaViewModel
+@{
+    ViewBag.Title = "Alquilar Casa";
 }
 
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Alquilar", "Casas", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdCasa, "Casa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IdCasa, Model.CasasDisponibles, "-- Seleccione una casa --", new { @class = "form-control", id = "ddlCasas" })
+                @Html.ValidationMessageFor(model => model.IdCasa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PrecioCasa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.PrecioCasa, new { @class = "form-control", @readonly = "readonly", id = "txtPrecio" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsuarioAlquiler, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.UsuarioAlquiler, new { @class = "form-control", placeholder = "Ingrese su nombre de usuario" })
+                @Html.ValidationMessageFor(model => model.UsuarioAlquiler, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Alquilar</button>
+                @Html.ActionLink("Cancelar", "Consulta", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#ddlCasas").change(function () {
+                var selectedId = $(this).val();
+                if (selectedId) {
+                    $.get('@Url.Action("ObtenerPrecioCasa", "Casas")', { id: selectedId }, function (data) {
+                        $("#txtPrecio").val(data);
+                    });
+                } else {
+                    $("#txtPrecio").val("");
+                }
+            });
+        });
+    </script>
+}

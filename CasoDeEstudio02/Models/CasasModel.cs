@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Mvc;
 
 namespace CasoDeEstudio02.Models
 {
@@ -9,6 +10,8 @@ namespace CasoDeEstudio02.Models
         public decimal PrecioCasa { get; set; }
         public string UsuarioAlquiler { get; set; }
         public DateTime? FechaAlquiler { get; set; }
+
+        public SelectList CasasDisponibles { get; set; }
 
     }
 }
